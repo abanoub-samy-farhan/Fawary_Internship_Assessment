@@ -207,3 +207,119 @@ Order Price: 4175.015
 ```
 
 ### Order Tracking
+```plain
+>>> show orders ORD0
+** ORDER #ORD0 **
+STATUS: SHIPPED
+OrderedAt: 2025-07-05
+
+** Shipment Notice **
+1X LG TV Full HD	3500.5
+----------------
+Total Package Weight: 3500.5
+
+** Order Items **
+1X LG TV Full HD	3999.99
+---------------
+Subtotal Price: 3999.99
+Shipping Fees: 175.025
+
+Order Price: 4175.015
+
+
+>>> confirm ORD0
+>>> show orders ORD0
+** ORDER #ORD0 **
+STATUS: RECEIVED
+OrderedAt: 2025-07-05
+
+** Shipment Notice **
+1X LG TV Full HD	3500.5
+----------------
+Total Package Weight: 3500.5
+
+** Order Items **
+1X LG TV Full HD	3999.99
+---------------
+Subtotal Price: 3999.99
+Shipping Fees: 175.025
+
+Order Price: 4175.015
+```
+
+Now, we can see more about corner cases and how the system handles them.
+
+### Insufficient Balance
+```plain
+>>> add LPT301 1
+>>> show cart
+** Chart Items **
+
+Number of items: 1
+------------------
+1X Dell XPS 13(LPT301)	34999.99
+------------------
+Total Price : 34999.99
+Shipping Fees : 1650.0
+>>> show balance
+1000.0
+>>> checkout
+Your balance is insufficient, you got 1000.0 and the order is worth 36649.99
+```
+
+### Expired Products
+```java
+Dairy prod2  = new Dairy("CHE202", "Cheddar",      50f, 60f, LocalDate.of(2023, 12, 1));  // expired
+addToInventory(prod2, 5);
+```
+```plain
+>>> add CHE202
+>>> show cart
+** Chart Items **
+
+Number of items: 1
+------------------
+1X Cheddar(CHE202)	60.0
+------------------
+Total Price : 60.0
+WARNING: Some of the products in the cart has expired
+	- Cheddar (CHE202)
+Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout
+>>> checkout
+
+Transaction Failed
+
+-------------------------------
+Some of the products in the cart has expired
+	- Cheddar (CHE202)
+Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout again
+```
+
+### Insufficient Stock
+```java
+Dairy prod3  = new Dairy("CHE203", "Mozzarella",  50f, 60f, LocalDate.of(2025, 12, 1));  // not expired
+addToInventory(prod3, 5);
+```
+```plain
+>>> add CHE204 15
+>>> show cart
+** Chart Items **
+
+Number of items: 1
+------------------
+15X Mozzarella(CHE204)	675.0
+------------------
+Total Price : 675.0
+>>> show balance
+1000.0
+>>> checkout
+
+Transaction Failed
+
+-------------------------------
+Some of the products in the cart are either out of stock or with insufficient amount
+Items out of stock are automatically removed from the cart, Here is a list of insufficient amount products (if any)
+-------------------------------------------------
+Product: Mozzarella(CHE204) 15 Available: 10
+Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout again
+```
