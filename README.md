@@ -73,6 +73,48 @@ Total Price : 38999.99
 Shipping Fees : 1800.0
 ```
 
+### Removing a product from the cart (Code Snippet)
+```java
+user.cart.removeItem(productID, quantity, inventory);
+```
+### Removing a product from the cart (Toplevel)
+```plain
+>>> remove LPT302 1
+>>> show cart
+Cart is empty right now.
+```
+
+### Manipulating the balance
+```plain
+>>> show balance
+1000.0
+>>> balance 100000
+>>> show balance
+100000.0
+```
+
+### Lookup in the inventory using prefix search
+```plain
+>>> show inventory c
+Number of different products: 5
+-----------------------------------------
+8X Camembert	(CHE207)	44.0
+5X Cheddar	(CHE202)	60.0
+7X Cream Cheese	(CHE209)	47.0
+6X Cottage	(CHE214)	38.0
+2X Canon DSLR 250D	(CAM501)	19999.99
+-------------------------------------
+Want to buy anything ? use the 'add' command to add to the cart
+
+>>> show inventory ca
+Number of different products: 2
+-----------------------------------------
+8X Camembert	(CHE207)	44.0
+2X Canon DSLR 250D	(CAM501)	19999.99
+-------------------------------------
+Want to buy anything ? use the 'add' command to add to the cart
+```
+
 ## Results
 
 This section illustrates the results of checkout for different scenarios, including successful checkout, insufficient balance, expired products, insufficient stock, and more.
@@ -297,8 +339,8 @@ Make sure to remove them by using the command 'remove [productId] [quantity]' be
 
 ### Insufficient Stock
 ```java
-Dairy prod3  = new Dairy("CHE203", "Mozzarella",  50f, 60f, LocalDate.of(2025, 12, 1));  // not expired
-addToInventory(prod3, 5);
+Dairy prod4  = new Dairy("CHE204", "Mozzarella",  50f, 60f, LocalDate.of(2025, 12, 1));  // not expired
+addToInventory(prod4, 10);
 ```
 ```plain
 >>> add CHE204 15
@@ -322,4 +364,45 @@ Items out of stock are automatically removed from the cart, Here is a list of in
 -------------------------------------------------
 Product: Mozzarella(CHE204) 15 Available: 10
 Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout again
+```
+
+## Insufficient Stock with Expired Products
+```java
+Dairy prod2  = new Dairy("CHE202", "Cheddar", 50f, 60f, LocalDate.of(2023, 12, 1));  // expired
+addToInventory(prod2, 5);
+
+Electronic device5  = new Electronic("LPT301", "Dell XPS 13", 33000.00f, 34999.99f);
+addToInventory(device5, 1);
+
+
+```
+```plain
+>>> add CHE202 4
+>>> add LPT301 2
+>>> show cart
+** Chart Items **
+
+Number of items: 2
+------------------
+2X Dell XPS 13(LPT301)	69999.98
+4X Cheddar(CHE202)	240.0
+------------------
+Total Price : 70239.98
+Shipping Fees : 3300.0
+WARNING: Some of the products in the cart has expired
+	- Cheddar (CHE202)
+Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout
+>>> checkout
+
+Transaction Failed
+
+-------------------------------
+Some of the products in the cart has expired
+	- Cheddar (CHE202)
+Some of the products in the cart are either out of stock or with insufficient amount
+Items out of stock are automatically removed from the cart, Here is a list of insufficient amount products (if any)
+-------------------------------------------------
+Product: Dell XPS 13(LPT301) 2 Available: 1
+Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout again
+
 ```
