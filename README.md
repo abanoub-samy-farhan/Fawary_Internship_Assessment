@@ -1,0 +1,76 @@
+# Fawary Internship Assessment Project
+
+This is a simple eCommerce website demonstrating the use of the core OOP concepts using Java. The project is build with interactive console interface, allowing users to communicate with the system and perform various actions such as adding products to the cart, placing orders, tracking orders, etc. 
+
+# Table of Contents
+1. [Models](#models)
+2. [Design Choices](#design-choices)
+4. [Examples and Results](#examples-and-results)
+3. [Installation and Usage](#installation-and-usage)
+
+# Models
+The project consists of the following models:
+- `Product`: Represents a product in the eCommerce system. it's a generic class that can be exteneded to create specific products such as `Electronics`, `Clothing`, etc.
+- `Cart`: Represents a shopping cart that holds products added by the user.
+- `Order`: Represents an order placed by the user, containing a list of products and the total price, including shipping costs and a real-time status of the order.
+- `Customer`: Represents a customer in the eCommerce system, containing personal information, balance, shopping cart and a list of orders placed by the customer.
+- `ShippingService`: Stimulates the shipping service role in the eCommerce system, providing methods to calculate shipping costs, track orders and changing orders' status accordingly.
+- `Inventory`: Represents the inventory of the eCommerce system, managing the products available for sale and their quantities. Build using Trie data structure to allow fast prefix searrching and easy retrieval of products.
+
+There are classes that implements different interfaces to provide additional functionalities, such as `Shippable` for products that can be shipped and `Expirable` for products that have an expiration date.
+
+There are also some helper classes such as `CartItem`, `OrderStatus`, `NoEnoughProducts`, `ProductNotFound`, etc.
+
+
+# Design Choices
+
+This project is designed to demonstrate the core OOP concepts such as encapsulation, inheritance, polymorphism and abstraction. Also, I decided to advance by making it an interactive system that anyone can use, using advanced Trie data structure for adding additional functionalities than just a simple eCommerce system.
+
+# Examples and Results
+Here are some examples of how to use the project and how system is responding to some actions and corner cases:
+
+## Examples
+### Showing the inventory items (Code Snippet)
+```java
+Map<Product, Integer> allProducts = inventory.getAllProducts();
+```
+### Showing the inventory items (Toplevel)
+```plain
+>>> show inventory
+Number of different products: 30
+-----------------------------------------
+1X Brie	(CHE206)	48.0
+4X Samsung Smart TV	(TV103)	4599.99
+3X The Great Gatsby	(BOK105)	78.9
+7X WD External HDD 1TB	(HDP701)	1399.99
+4X Ricotta	(CHE208)	43.0
+....
+3X Swiss	(CHE212)	41.0
+6X Cottage	(CHE214)	38.0
+3X MacBook Air M1	(LPT302)	38999.99
+2X Canon DSLR 250D	(CAM501)	19999.99
+-------------------------------------
+Want to buy anything ? use the 'add' command to add to the cart
+```
+
+### Adding a product to the cart (Code Snippet)
+```java
+user.cart.addItem(productID, quantity, inventory);
+```
+### Adding a product to the cart (Toplevel)
+```plain
+>>> show cart
+Cart is empty right now.
+>>> add LPT302 1
+>>> show cart
+** Chart Items **
+
+Number of items: 1
+------------------
+1X MacBook Air M1(LPT302)	38999.99
+------------------
+Total Price : 38999.99
+Shipping Fees : 1800.0
+```
+
+## Results

@@ -24,16 +24,17 @@ public class Main {
         String lastName = input.nextLine().trim();
 
         Customer user =  new Customer(firstName, lastName, "test@gmail.com", 1000F);
-        System.out.println("Welcome" + firstName + " " + lastName);
+        System.out.println("Welcome " + firstName + " " + lastName);
         System.out.println("Type 'help' to know all the available commands. \n");
-        while(true){
+        boolean quit = false;
+        while(!quit){
             System.out.print(">>> ");
             String[] arg = input.nextLine().trim().split(" ");
             String command = arg[0].toLowerCase();
 
             switch(command){
                 case "help":
-                    showHelp("");
+                    showHelp();
                     break;
 
                     case "balance":
@@ -56,17 +57,28 @@ public class Main {
                     break;
                 case "checkout":
                     checkout(user, inventory);
+                case "exit":
+                    quit = true;
+                    System.out.println("Goodbye!");
+                    break;
 
             }
         }
     }
 
-    private static void showHelp(String command){
-        if (command == null){
-            // print the default help
-        } else{
-            // print the command help menu
-        }
+    private static void showHelp(){
+        System.out.println("List of available commands: ");
+        System.out.println("------------------------------------------");
+        System.out.println("help - list available commands");
+        System.out.println("show inventory [productPrefx (optional)] - show the inventory contents");
+        System.out.println("show cart - show the cotents of the cart");
+        System.out.println("show balance - show the balance");
+        System.out.println("show orders [OrderID (optional)] - show orders/order of the user");
+        System.out.println("confirm [orderID] - confirm the recipient of the order");
+        System.out.println("ship [OrderId] - shipping orders");
+        System.out.println("checkout - checkout the cart items into orders");
+        System.out.println("add [ProductID] [Quantity (optional)] - add the product to the cart");
+        System.out.println("remove [ProductID] [Quantity (optional)] - remove the product from the cart");
     }
 
     private static void balanceCommand(String [] args, Customer user){
