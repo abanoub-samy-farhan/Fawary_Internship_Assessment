@@ -74,3 +74,136 @@ Shipping Fees : 1800.0
 ```
 
 ## Results
+
+This section illustrates the results of checkout for different scenarios, including successful checkout, insufficient balance, expired products, insufficient stock, and more.
+
+### Successful Checkout
+```plain
+>>> add LPT301 1
+>>> add WTC601 1
+>>> show cart
+** Chart Items **
+
+Number of items: 2
+------------------
+1X Apple Watch SE(WTC601)	10999.99
+1X Dell XPS 13(LPT301)	34999.99
+------------------
+Total Price : 45999.977
+Shipping Fees : 2150.0
+>>> balance 100000
+
+>>> checkout
+** ORDER #ORD0 **
+STATUS: PROCESSING
+OrderedAt: 2025-07-05
+
+** Shipment Notice **
+1X Apple Watch SE	10000.0
+1X Dell XPS 13	33000.0
+----------------
+Total Package Weight: 43000.0
+
+** Order Items **
+1X Apple Watch SE	10999.99
+1X Dell XPS 13	34999.99
+---------------
+Subtotal Price: 45999.977
+Shipping Fees: 2150.0
+
+Order Price: 48149.977
+
+
+
+Transaction done successfully
+```
+
+This shows a successful checkout where the user only orders shippable products, but what about ordering non-shippable products ?
+
+### Shippable and non-shippable products transaction
+I choose to place the shippable products in separate order from the non-shippable products, so the user can track them separately and also to avoid any issues with shipping costs and tracking.
+
+```plain
+>>> add CHE209 2
+>>> add TV102 1
+>>> add BOK103 1
+>>> show cart
+** Chart Items **
+
+Number of items: 3
+------------------
+2X Cream Cheese(CHE209)	94.0
+1X LG TV Full HD(TV102)	3999.99
+1X 1984(BOK103)	85.0
+------------------
+Total Price : 4178.99
+Shipping Fees : 175.025
+>>> checkout
+** ORDER #ORD0 **
+STATUS: PROCESSING
+OrderedAt: 2025-07-05
+
+** Shipment Notice **
+1X LG TV Full HD	3500.5
+----------------
+Total Package Weight: 3500.5
+
+** Order Items **
+1X LG TV Full HD	3999.99
+---------------
+Subtotal Price: 3999.99
+Shipping Fees: 175.025
+
+Order Price: 4175.015
+
+
+** ORDER #ORD1 **
+STATUS: PROCESSING
+OrderedAt: 2025-07-05
+
+** Order Items **
+2X Cream Cheese	94.0
+1X 1984	85.0
+---------------
+Subtotal Price: 179.0
+
+Order Price: 179.0
+
+
+
+Transaction done successfully
+```
+
+Here we can see that the user ordered a shippable product (LG TV Full HD) and two non-shippable products (Cream Cheese and 1984). The system created two separate orders, one for the shippable product and another for the non-shippable products.
+
+Shippable orders have 3 statuses: `PROCESSING`, `SHIPPED` and `RECEIVED`, while non-shippable orders have only 2 statuses: `PROCESSING` and `RECEIVED`. What will happen if we tries to ship a non-shippable product ? 
+
+### Non-shippable product shipping attempt
+```plain
+>>> ship ORD1
+
+Order Not Shippable
+```
+### Order Shipping for Shippable Products
+```plain
+>>> ship ORD0
+>>> show orders ORD0
+** ORDER #ORD0 **
+STATUS: SHIPPED
+OrderedAt: 2025-07-05
+
+** Shipment Notice **
+1X LG TV Full HD	3500.5
+----------------
+Total Package Weight: 3500.5
+
+** Order Items **
+1X LG TV Full HD	3999.99
+---------------
+Subtotal Price: 3999.99
+Shipping Fees: 175.025
+
+Order Price: 4175.015
+```
+
+### Order Tracking

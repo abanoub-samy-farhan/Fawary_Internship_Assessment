@@ -36,7 +36,6 @@ public class Main {
                 case "help":
                     showHelp();
                     break;
-
                     case "balance":
                         balanceCommand(arg, user);
                         break;
@@ -57,6 +56,7 @@ public class Main {
                     break;
                 case "checkout":
                     checkout(user, inventory);
+                    break;
                 case "exit":
                     quit = true;
                     System.out.println("Goodbye!");
