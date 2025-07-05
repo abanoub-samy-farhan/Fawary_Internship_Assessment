@@ -406,3 +406,15 @@ Product: Dell XPS 13(LPT301) 2 Available: 1
 Make sure to remove them by using the command 'remove [productId] [quantity]' before checkout again
 
 ```
+
+# Installation and Usage
+To run the project, you need to have Java installed on your machine. You can clone the repository and run the `Main.java` file to start the interactive console interface.
+
+```bash
+git clone https://github.com/abanoub-samy-farhan/Fawary_Internship_Assessment
+cd Fawary_Internship_Assessment/src
+mkdir out
+javac -d out ecommerce/*.java ecommerce/models/*.java ecommerce/services/*.java ecommerce/utils/*.java ecommerce/Main.java
+java -cp out ecommerce.Main
+```
+
